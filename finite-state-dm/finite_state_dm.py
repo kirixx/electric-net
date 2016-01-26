@@ -9,6 +9,7 @@ currentState = None
 #faultTree
 tree = None
 node = None
+findCheck = False
 #node from which we start
 rootOfCases = None
 #setting modulation cases
@@ -60,21 +61,23 @@ states = {
 
 #configure settings
 def setSettings(caseNum,currentNode):
-    global node
-    findCheck = False
-    for i in range(len(node)):
-        if(node[i].tag == map[caseNum]):     
-            print(node[i].attrib['stateId'])
-            states[node[i].attrib['stateId']] = True
+    global findCheck
+    for i in range(len(currentNode)):
+        if(currentNode[i].tag == map[caseNum]):     
+            print(currentNode[i].attrib['stateId'])
+            states[currentNode[i].attrib['stateId']] = True
             findCheck = True
             break
-        elif(node[i].tag != map[caseNum] and len(node[i]) > 1):
+        elif(currentNode[i].tag != map[caseNum] and len(currentNode[i]) > 1):
+
+            print(len(currentNode[i]))
             print(True)
             settings[map[caseNum]] = True
-            node = node[i]
-            print(node[i-1])
+            currentNode = currentNode[i]
+            setSettings(caseNum,currentNode[i+1])
+            print(currentNode[i-1])
        # if findCheck == False:   
-            setSettings(caseNum, node[i+1])
+            
                     
                     
     
