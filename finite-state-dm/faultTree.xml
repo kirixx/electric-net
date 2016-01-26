@@ -30,8 +30,8 @@
 			</NoSignalFromSmokeDetectionSys>
 			<NoSignalFromManualActSys>
 				<ManualSwitchFallsToOpen stateId = "MS"/>
-				<PressureSwitchFalls state id = "PS"/>
-				<OperatorFailsToTakeAction state id = "OP"/>
+				<PressureSwitchFalls stateId = "PS"/>
+				<OperatorFailsToTakeAction stateId = "OP"/>
 			</NoSignalFromManualActSys>
 		</NoSignalFromDetectionSystem>
 		<StartRelayFailInOpenPosition stateId = "SR"/>
