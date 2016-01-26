@@ -1,4 +1,5 @@
 import os
+import operator
 import sys
 import xml.etree.cElementTree as ET
 from enum import Enum
@@ -7,7 +8,8 @@ from enum import Enum
 currentState = None
 
 #setting modulation cases
-settings = {'NoCurrentFromDCCurrentSource'            : None,
+settings = {
+            'NoCurrentFromDCCurrentSource'            : None,
             'NoSignalFromHeatDetectionSys'            : None,
             'StartRelayFailInOpenPosition'            : None,
             'NoSignalFromDetectionSystem'             : None,
@@ -30,8 +32,33 @@ settings = {'NoCurrentFromDCCurrentSource'            : None,
             'ManualSwitchFallsToOpen'                 : None,
             'OperatorFailsToTakeAction'               : None    
            }
+map = {
+            0  : 'NoCurrentFromDCCurrentSource',           
+            1  : 'NoSignalFromHeatDetectionSys',           
+            2  : 'StartRelayFailInOpenPosition',           
+            3  : 'NoSignalFromDetectionSystem',           
+            4  : 'NoSignalFromHeatDetectionSys',          
+            5  : 'PressureSwitchFailInClosedPos',          
+            6  : 'FusePlugsAreNotActivated',                
+            7  : 'FusePlug1DoesNotRespond',                 
+            8  : 'FusePlug2DoesNotRespond',                 
+            9 : 'FusePlug3DoesNotRespond',                
+            10 : 'FusePlug4DoesNotRespond',                 
+            11 : 'NoSignalFromSmokeDetectionSys',           
+            12 : 'AtLeast2OfThe3SmokeDetectorsDontRespond', 
+            13 : 'Combination1Fails',                       
+            14 : 'Combination2Fails',                      
+            15 : 'Combination3Fails',                       
+            16 : 'SmokeDetector1DoesntRespond',             
+            17 : 'SmokeDetector2DoesntRespond',             
+            18 : 'SmokeDetector3DoesntRespond',             
+            19 : 'NoSignalFromManualActSys',                
+            20 : 'ManualSwitchFallsToOpen',                 
+            21 : 'OperatorFailsToTakeAction'                   
+           }
 #list of possible states of machine
-states = {'DC'  : False,
+states = {
+          'DC'  : False,
           'SR'  : False,
           'PS'  : False,
           'VU'  : False,
@@ -43,7 +70,8 @@ states = {'DC'  : False,
           'FP4' : False,
           'SD1' : False,
           'SD2' : False,
-          'SD3' : False}
+          'SD3' : False
+         }
 
 def exitState(state):
     print()
@@ -60,9 +88,13 @@ except IOError as e:
 #main function
 def main(argv =sys.argv):
      if len(argv) > 1 and argv[1] == 'NoSignalFromTheStartRelay':
-         
-         '''while True:
-             a = int(input())'''
+         while True:
+             print('Choose case of modulation:\n')
+             for idx, case in enumerate(map.values()):
+                 print(idx,case)
+             a = int(input())
+             if a > len(map)-1:
+                 print('incorrect number')             
      else:
          print('try again with \'NoSignalFromTheStartRelay\'')  
 
