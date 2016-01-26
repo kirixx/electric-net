@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FaultTree>
+	<NoSignalFromTheStartRelay>
+		<NoCurrentFromDCCurrentSource>
+				<state id = "DC"/>
+		</NoCurrentFromDCCurrentSource>
+		<NoSignalFromDetectionSystem>
+			<NoSignalFromHeatDetectionSys>
+					<PressureSwitchFailInClosedPos>
+						<state id = "PS"/>
+					</PressureSwitchFailInClosedPos>
+					<FusePlugsAreNotActivated>
+						<FusePlug1DoesNotRespond>
+							<state id = "FP1"/>
+						</FusePlug1DoesNotRespond>
+						<FusePlug2DoesNotRespond>
+							<state id = "FP2"/>
+						</FusePlug2DoesNotRespond>
+						<FusePlug3DoesNotRespond>
+							<state id = "FP3"/>
+						</FusePlug3DoesNotRespond>
+						<FusePlug4DoesNotRespond>
+							<state id = "FP4"/>
+						</FusePlug4DoesNotRespond>
+					</FusePlugsAreNotActivated>
+			</NoSignalFromHeatDetectionSys>
+			<NoSignalFromSmokeDetectionSys>
+			<AtLeast2OfThe3SmokeDetectorsDontRespond>
+				<Combination1Fails>
+					<SmokeDetector1DoesntRespond>
+						<state id = "SD1"/>
+					</SmokeDetector1DoesntRespond>
+					<SmokeDetector2DoesntRespond>
+						<state id = "SD2"/>
+					</SmokeDetector2DoesntRespond>
+				</Combination1Fails>
+				<Combination2Fails>
+					<SmokeDetector1DoesntRespond>
+						<state id = "SD1"/>
+					</SmokeDetector1DoesntRespond>
+					<SmokeDetector3DoesntRespond>
+						<state id = "SD3"/>
+					</SmokeDetector3DoesntRespond>
+				</Combination2Fails>
+				<Combination3Fails>
+					<SmokeDetector2DoesntRespond>
+						<state id = "SD2"/>
+					</SmokeDetector2DoesntRespond>
+					<SmokeDetector3DoesntRespond>
+						<state id = "SD3"/>
+					</SmokeDetector3DoesntRespond>
+				</Combination3Fails>
+			</AtLeast2OfThe3SmokeDetectorsDontRespond>
+			</NoSignalFromSmokeDetectionSys>
+			<NoSignalFromManualActSys>
+				<ManualSwitchFallsToOpen>
+					<state id = "MS"/>
+				</ManualSwitchFallsToOpen>
+				<PressureSwitchFalls>
+					<state id = "PS"/>
+				</PressureSwitchFalls>
+				<OperatorFailsToTakeAction>
+					<state id = "OP"/>
+				</OperatorFailsToTakeAction>
+			</NoSignalFromManualActSys>
+		</NoSignalFromDetectionSystem>
+		<StartRelayFailInOpenPosition>
+				<state id = "SR"/>
+		</StartRelayFailInOpenPosition>
+	</NoSignalFromTheStartRelay>	
+</FaultTree>
