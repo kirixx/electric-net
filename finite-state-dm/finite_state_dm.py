@@ -69,14 +69,8 @@ def setSettings(caseNum,currentNode):
             findCheck = True
             break
         elif(currentNode[i].tag != map[caseNum] and len(currentNode[i]) > 1):
-
-            print(len(currentNode[i]))
-            print(True)
-            settings[map[caseNum]] = True
-            currentNode = currentNode[i]
-            setSettings(caseNum,currentNode[i+1])
-            print(currentNode[i-1])
-       # if findCheck == False:   
+            print(currentNode[i])
+            setSettings(caseNum, currentNode[i]) 
             
                     
                     
