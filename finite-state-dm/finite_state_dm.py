@@ -6,7 +6,10 @@ from enum import Enum
 
 #current state of state-machine
 currentState = None
-
+#faultTree
+tree = None
+#node from which we start
+rootOfCases = None
 #setting modulation cases
 settings = {
             'NoCurrentFromDCCurrentSource'            : None,
@@ -42,7 +45,7 @@ map = {
             6  : 'FusePlugsAreNotActivated',                
             7  : 'FusePlug1DoesNotRespond',                 
             8  : 'FusePlug2DoesNotRespond',                 
-            9 : 'FusePlug3DoesNotRespond',                
+            9  : 'FusePlug3DoesNotRespond',                
             10 : 'FusePlug4DoesNotRespond',                 
             11 : 'NoSignalFromSmokeDetectionSys',           
             12 : 'AtLeast2OfThe3SmokeDetectorsDontRespond', 
@@ -55,7 +58,7 @@ map = {
             19 : 'NoSignalFromManualActSys',                
             20 : 'ManualSwitchFallsToOpen',                 
             21 : 'OperatorFailsToTakeAction'                   
-           }
+      }
 #list of possible states of machine
 states = {
           'DC'  : False,
@@ -73,30 +76,41 @@ states = {
           'SD3' : False
          }
 
-def exitState(state):
-    print()
-
-try:
-     tree = ET.parse('faultTree.xml')
-     root = tree.getroot().find('NoSignalFromTheStartRelay')
-     signal = root.find("NoCurrentFromDCCurrentSource")
-     states['DC'] = True
-     print(states['DC'])
-except IOError as e:
-    print ('\nERROR - cant find file: %s\n') % e	
+#configure settings
+def setSettings(caseNum):
+    for case in map.keys(): 
+        if caseNum == case:
+            node = tree.getroot().find(rootOfCases) # get root node
+            for i in range(len(node)):
+                if(node[i].tag == map[caseNum]):     
+                    print(node[i].attrib['stateId'])
+                    break
+                elif(node[i].tag != map[caseNum] and len(node[i]) == 1): # if name of node not equal name of real case, and len dont have child then
+                    print(False)
+                elif(node[i].tag != map[caseNum] and len(node[i]) != 1):
+                    print(True)
+                
 
 #main function
-def main(argv =sys.argv):
+def main(argv = sys.argv):
+     global tree
+     global rootOfCases
+     try:
+        tree = ET.parse('faultTree.xml')
+     except IOError as e:
+        print ('\nERROR - cant find file: %s\n') % e
      if len(argv) > 1 and argv[1] == 'NoSignalFromTheStartRelay':
+         rootOfCases = argv[1]
          while True:
              print('Choose case of modulation:\n')
              for idx, case in enumerate(map.values()):
                  print(idx,case)
              a = int(input())
+             setSettings(a)
              if a > len(map)-1:
                  print('incorrect number')             
      else:
          print('try again with \'NoSignalFromTheStartRelay\'')  
 
-if __name__ == "__main__":
+if __name__ == "__main__":     
     main()
