@@ -1,7 +1,9 @@
 import os
+import sys
 import xml.etree.cElementTree as ET
 from enum import Enum
 
+currentState = None
 states = {'DC' : False,
           'SR' : False,
           'PS' : False,
@@ -16,6 +18,9 @@ states = {'DC' : False,
           'SD2' : False,
           'SD3' : False}
 
+def exitState(state):
+    print()
+
 try:
      tree = ET.parse('faultTree.xml')
      root = tree.getroot().find('NoSignalFromTheStartRelay')
@@ -25,3 +30,11 @@ try:
 except IOError as e:
     print ('\nERROR - cant find file: %s\n') % e	
 
+def main(argv =sys.argv):
+     if len(argv) > 1 and argv[1] == 'NoSignalFromTheStartRelay':
+         print('FUCK')
+     else:
+         print('try again with \'NoSignalFromTheStartRelay\'')  
+
+if __name__ == "__main__":
+    main()
