@@ -27,6 +27,7 @@
 					<SmokeDetector3DoesntRespond stateId = "SD3"/>
 				</Combination3Fails>
 			</AtLeast2OfThe3SmokeDetectorsDontRespond>
+			<VictingUnitFailsToRaiseSignal stateId = 'VU'/>
 			</NoSignalFromSmokeDetectionSys>
 			<NoSignalFromManualActSys>
 				<ManualSwitchFallsToOpen stateId = "MS"/>

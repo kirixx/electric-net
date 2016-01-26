@@ -16,6 +16,7 @@ settings = {
             'NoCurrentFromDCCurrentSource'            : None,
             'StartRelayFailInOpenPosition'            : None,
             'PressureSwitchFailInClosedPos'           : None,
+            'VictingUnitFailsToRaiseSignal'           : None,
             'FusePlug1DoesNotRespond'                 : None,
             'FusePlug2DoesNotRespond'                 : None,
             'FusePlug3DoesNotRespond'                 : None,
@@ -28,16 +29,17 @@ settings = {
 map = {
             0  : 'NoCurrentFromDCCurrentSource',                      
             1  : 'StartRelayFailInOpenPosition',                            
-            2  : 'PressureSwitchFailInClosedPos',                          
-            3  : 'FusePlug1DoesNotRespond',                 
-            4  : 'FusePlug2DoesNotRespond',                 
-            5  : 'FusePlug3DoesNotRespond',                
-            6  : 'FusePlug4DoesNotRespond',                                                   
-            7  : 'SmokeDetector1DoesntRespond',             
-            8  : 'SmokeDetector2DoesntRespond',             
-            9  : 'SmokeDetector3DoesntRespond',                             
-            10 : 'ManualSwitchFallsToOpen',                 
-            11 : 'OperatorFailsToTakeAction'                   
+            2  : 'PressureSwitchFailInClosedPos', 
+            3  : 'VictingUnitFailsToRaiseSignal',                      
+            4  : 'FusePlug1DoesNotRespond',                 
+            5  : 'FusePlug2DoesNotRespond',                 
+            6  : 'FusePlug3DoesNotRespond',                
+            7  : 'FusePlug4DoesNotRespond',                                                   
+            8  : 'SmokeDetector1DoesntRespond',             
+            9  : 'SmokeDetector2DoesntRespond',             
+            10  : 'SmokeDetector3DoesntRespond',                             
+            11 : 'ManualSwitchFallsToOpen',                 
+            12 : 'OperatorFailsToTakeAction'                   
       }
 #list of possible states of machine
 states = {
@@ -59,21 +61,21 @@ states = {
 #configure settings
 def setSettings(caseNum,currentNode):
     global node
-    for case in map.keys(): 
-        if caseNum == case: 
-            for i in range(len(node)):
-                if(node[i].tag == map[caseNum]):     
-                    print(node[i].attrib['stateId'])
-                    states[node[i].attrib['stateId']] = True
-                    break
-                elif(node[i].tag != map[caseNum] and len(node[i]) == 0): # if name of node not equal name of real case, and len dont have child then
-                    print(False)
-                    settings[map[caseNum]] = False
-                    print(settings[map[caseNum]])
-                elif(node[i].tag != map[caseNum] and len(node[i]) > 1):
-                    print(True)
-                    settings[map[caseNum]] = True
-                    #setSettings(caseNum, node[i])
+    findCheck = False
+    for i in range(len(node)):
+        if(node[i].tag == map[caseNum]):     
+            print(node[i].attrib['stateId'])
+            states[node[i].attrib['stateId']] = True
+            findCheck = True
+            break
+        elif(node[i].tag != map[caseNum] and len(node[i]) > 1):
+            print(True)
+            settings[map[caseNum]] = True
+            node = node[i]
+            print(node[i-1])
+       # if findCheck == False:   
+            setSettings(caseNum, node[i+1])
+                    
                     
     
 #main function
