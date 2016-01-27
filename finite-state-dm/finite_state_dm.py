@@ -22,31 +22,31 @@ map = {
             5  : 'FusePlug2DoesNotRespond',                 
             6  : 'FusePlug3DoesNotRespond',                
             7  : 'FusePlug4DoesNotRespond',                                                   
-            8  : 'SmokeDetector1DoesntRespond',             
-            9  : 'SmokeDetector2DoesntRespond',             
-            10 : 'SmokeDetector3DoesntRespond',                             
+            8  : 'SmokeDetector1and2DoesntRespond',             
+            9  : 'SmokeDetector1and3DoesntRespond',             
+            10 : 'SmokeDetector2and3DoesntRespond',                             
             11 : 'ManualSwitchFallsToOpen',                 
             12 : 'OperatorFailsToTakeAction'                   
       }
 #list of possible states of machine
 states = {
-          'DC'  : False,
-          'SR'  : False,
-          'PS'  : False,
-          'VU'  : False,
-          'MS'  : False,
-          'OP'  : False,
-          'FP1' : False,
-          'FP2' : False,
-          'FP3' : False,
-          'FP4' : False,
-          'SD1' : False,
-          'SD2' : False,
-          'SD3' : False
+          'DC'        : False,
+          'SR'        : False,
+          'PS'        : False,
+          'VU'        : False,
+          'MS'        : False,
+          'OP'        : False,
+          'FP1'       : False,
+          'FP2'       : False,
+          'FP3'       : False,
+          'FP4'       : False,
+          'SD1andSD2' : False,
+          'SD1andSD3' : False,
+          'SD2andSD3' : False
          }
 
-#configure settings
-def setSettings(caseNum,currentNode):
+#find a solution for the chosen problem
+def findInFaultTree(caseNum,currentNode):
     global findCheck
     for i in range(len(currentNode)):
         if(currentNode[i].tag == map[caseNum]):     
@@ -55,7 +55,7 @@ def setSettings(caseNum,currentNode):
             break
         elif(currentNode[i].tag != map[caseNum] and len(currentNode[i]) > 1):
             if findCheck == False:
-                setSettings(caseNum, currentNode[i])
+                findInFaultTree(caseNum, currentNode[i])
         else:
             findCheck = False 
             
@@ -88,7 +88,7 @@ def main(argv = sys.argv):
              for idx, case in enumerate(map.values()):
                  print(idx,case)
              a = int(input())
-             setSettings(a,node)
+             findInFaultTree(a,node)
              if a > len(map)-1:
                  print('incorrect number')             
      else:
