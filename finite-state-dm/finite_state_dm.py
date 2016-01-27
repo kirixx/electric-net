@@ -13,20 +13,6 @@ findCheck = False
 #node from which we start
 rootOfCases = None
 #setting modulation cases
-settings = {            
-            'NoCurrentFromDCCurrentSource'            : None,
-            'StartRelayFailInOpenPosition'            : None,
-            'PressureSwitchFailInClosedPos'           : None,
-            'VictingUnitFailsToRaiseSignal'           : None,
-            'FusePlug1DoesNotRespond'                 : None,
-            'FusePlug2DoesNotRespond'                 : None,
-            'FusePlug3DoesNotRespond'                 : None,
-            'FusePlug4DoesNotRespond'                 : None,
-            'SmokeDetector1DoesntRespond'             : None,
-            'SmokeDetector2DoesntRespond'             : None,
-            'SmokeDetector3DoesntRespond'             : None,
-            'ManualSwitchFallsToOpen'                 : None
-           }
 map = {
             0  : 'NoCurrentFromDCCurrentSource',                      
             1  : 'StartRelayFailInOpenPosition',                            
@@ -38,7 +24,7 @@ map = {
             7  : 'FusePlug4DoesNotRespond',                                                   
             8  : 'SmokeDetector1DoesntRespond',             
             9  : 'SmokeDetector2DoesntRespond',             
-            10  : 'SmokeDetector3DoesntRespond',                             
+            10 : 'SmokeDetector3DoesntRespond',                             
             11 : 'ManualSwitchFallsToOpen',                 
             12 : 'OperatorFailsToTakeAction'                   
       }
@@ -64,16 +50,26 @@ def setSettings(caseNum,currentNode):
     global findCheck
     for i in range(len(currentNode)):
         if(currentNode[i].tag == map[caseNum]):     
-            print(currentNode[i].attrib['stateId'])
-            states[currentNode[i].attrib['stateId']] = True
+            switchState(currentNode[i].attrib['stateId'])
             findCheck = True
             break
         elif(currentNode[i].tag != map[caseNum] and len(currentNode[i]) > 1):
-            print(currentNode[i])
-            setSettings(caseNum, currentNode[i]) 
+            if findCheck == False:
+                setSettings(caseNum, currentNode[i])
+        else:
+            findCheck = False 
             
-                    
-                    
+def switchState(state):
+    exitFromLastState()
+    print('system set', state, 'state\n')
+    states[state] = True
+                        
+def exitFromLastState():
+    for state in states.keys():
+        if states[state] == True:
+            states[state] = False
+        else:
+            print(state, states[state])                    
     
 #main function
 def main(argv = sys.argv):
