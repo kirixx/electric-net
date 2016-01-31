@@ -1,7 +1,8 @@
 ﻿import os
 import operator
-import sys
+import sys, time
 import xml.etree.cElementTree as ET
+from random import randint
 from enum import Enum
 
 #current state of state-machine
@@ -10,8 +11,6 @@ currentState = None
 tree = None
 node = None
 findCheck = False
-#node from which we start
-rootOfCases = None
 #setting modulation cases
 map = {
             0  : 'NoCurrentFromDCCurrentSource',                      
@@ -30,6 +29,7 @@ map = {
       }
 #list of possible states of machine
 states = {
+          'DEFAULT'   : False,
           'DC'        : False,
           'SR'        : False,
           'PS'        : False,
@@ -49,19 +49,22 @@ states = {
 def findInFaultTree(caseNum,currentNode):
     global findCheck
     for i in range(len(currentNode)):
-        if(currentNode[i].tag == map[caseNum]):     
+        if(currentNode[i].tag == map[caseNum]):
+            print(currentNode[i])
             switchState(currentNode[i].attrib['stateId'])
             findCheck = True
             break
         elif(currentNode[i].tag != map[caseNum] and len(currentNode[i]) > 1):
             if findCheck == False:
+                time.sleep(2)
+                print(currentNode[i])
                 findInFaultTree(caseNum, currentNode[i])
         else:
             findCheck = False 
             
 def switchState(state):
     exitFromLastState()
-    print('system set', state, 'state\n')
+    print('***SYSTEM SET', state, 'STATE***\n')
     states[state] = True
                         
 def exitFromLastState():
@@ -74,25 +77,25 @@ def exitFromLastState():
 #main function
 def main(argv = sys.argv):
      global tree
-     global rootOfCases
      global node
      try:
         tree = ET.parse('faultTree.xml')
      except IOError as e:
-        print ('\nERROR - cant find file: %s\n') % e
-     if len(argv) > 1 and argv[1] == 'NoSignalFromTheStartRelay':
-         rootOfCases = argv[1]
-         node = tree.getroot().find(rootOfCases)
-         while True:
-             print('Choose case of modulation:\n')
-             for idx, case in enumerate(map.values()):
-                 print(idx,case)
-             a = int(input())
-             findInFaultTree(a,node)
-             if a > len(map)-1:
-                 print('incorrect number')             
-     else:
-         print('try again with \'NoSignalFromTheStartRelay\'')  
+        print ('\nERROR - cant find file: %s\n') % e 
+     node = tree.getroot()
+     while True:
+          print('Do you want start the system(y/n):\n')
+          a = input()
+          if a == 'y' or a =='Y':
+              states['DEFAULT'] = True
+              print('***ALL IS FINE, SYSTEM WORK IN DEFAULT = ',states['DEFAULT'],' STATE***\n')
+              time.sleep(5)
+              numberOfCase = randint(0,12)
+              print('***SOME KIND OF TROUBLE***', map[numberOfCase])
+
+              findInFaultTree(numberOfCase,node[0])
+          else:
+              sys.exit()          
 
 if __name__ == "__main__":     
     main()
