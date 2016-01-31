@@ -50,17 +50,19 @@ def findInFaultTree(caseNum,currentNode):
     global findCheck
     for i in range(len(currentNode)):
         if(currentNode[i].tag == map[caseNum]):
+            findCheck = True
+            print(1)
             print(currentNode[i])
             switchState(currentNode[i].attrib['stateId'])
-            findCheck = True
             break
         elif(currentNode[i].tag != map[caseNum] and len(currentNode[i]) > 1):
             if findCheck == False:
+                print(2)
                 time.sleep(2)
                 print(currentNode[i])
                 findInFaultTree(caseNum, currentNode[i])
-        else:
-            findCheck = False 
+        #else:
+            #findCheck = False 
             
 def switchState(state):
     exitFromLastState()
@@ -78,6 +80,7 @@ def exitFromLastState():
 def main(argv = sys.argv):
      global tree
      global node
+     global findCheck
      try:
         tree = ET.parse('faultTree.xml')
      except IOError as e:
@@ -87,6 +90,7 @@ def main(argv = sys.argv):
           print('Do you want start the system(y/n):\n')
           a = input()
           if a == 'y' or a =='Y':
+              findCheck = False
               states['DEFAULT'] = True
               print('***ALL IS FINE, SYSTEM WORK IN DEFAULT = ',states['DEFAULT'],' STATE***\n')
               time.sleep(5)
