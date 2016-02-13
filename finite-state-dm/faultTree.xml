@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FaultTree>
 	<NoSignalFromTheStartRelay>
-		<NoCurrentFromDCCurrentSource stateId = "DC"/>
+		<NoCurrentFromDCCurrentSource stateId = "DC"/>10</NoCurrentFromDCCurrentSource>
 		<NoSignalFromDetectionSystem>
 			<NoSignalFromHeatDetectionSys>
-					<PressureSwitchFailInClosedPos stateId = "PS"/>
+					<PressureSwitchFailInClosedPos stateId = "PS">20</PressureSwitchFailInClosedPos>
 					<FusePlugsAreNotActivated>
-						<FusePlug1DoesNotRespond stateId = "FP1"/>
-						<FusePlug2DoesNotRespond stateId = "FP2"/>
-						<FusePlug3DoesNotRespond stateId = "FP3"/>
-						<FusePlug4DoesNotRespond stateId = "FP4"/>
+						<FusePlug1DoesNotRespond stateId = "FP1">31</FusePlug1DoesNotRespond>
+						<FusePlug2DoesNotRespond stateId = "FP2">32</FusePlug2DoesNotRespond>
+						<FusePlug3DoesNotRespond stateId = "FP3">33</FusePlug3DoesNotRespond>
+						<FusePlug4DoesNotRespond stateId = "FP4">34</FusePlug4DoesNotRespond>
 					</FusePlugsAreNotActivated>
 			</NoSignalFromHeatDetectionSys>
 			<NoSignalFromSmokeDetectionSys>
 			<AtLeast2OfThe3SmokeDetectorsDontRespond>
-				<SmokeDetector1and2DoesntRespond stateId = "SD1andSD2"/>
-				<SmokeDetector1and3DoesntRespond stateId = "SD1andSD3"/>
-				<SmokeDetector2and3DoesntRespond stateId = "SD2andSD3"/>
+				<SmokeDetector1and2DoesntRespond stateId = "SD1andSD2">41</SmokeDetector1and2DoesntRespond>
+				<SmokeDetector1and3DoesntRespond stateId = "SD1andSD3">42</SmokeDetector1and3DoesntRespond>
+				<SmokeDetector2and3DoesntRespond stateId = "SD2andSD3">43</SmokeDetector2and3DoesntRespond>
 			</AtLeast2OfThe3SmokeDetectorsDontRespond>
-			<VictingUnitFailsToRaiseSignal stateId = 'VU'/>
+			<VictingUnitFailsToRaiseSignal stateId = 'VU'>51</VictingUnitFailsToRaiseSignal>
 			</NoSignalFromSmokeDetectionSys>
 			<NoSignalFromManualActSys>
-				<ManualSwitchFallsToOpen stateId = "MS"/>
-				<PressureSwitchFalls stateId = "PS"/>
-				<OperatorFailsToTakeAction stateId = "OP"/>
+				<ManualSwitchFallsToOpen stateId = "MS">61</ManualSwitchFallsToOpen>
+				<PressureSwitchFalls stateId = "PS"/>62</PressureSwitchFalls>
+				<OperatorFailsToTakeAction stateId = "OP">63</OperatorFailsToTakeAction>
 			</NoSignalFromManualActSys>
 		</NoSignalFromDetectionSystem>
-		<StartRelayFailInOpenPosition stateId = "SR"/>
+		<StartRelayFailInOpenPosition stateId = "SR">11</StartRelayFailInOpenPosition>
 	</NoSignalFromTheStartRelay>	
 </FaultTree>
