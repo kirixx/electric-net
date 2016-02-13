@@ -11,6 +11,7 @@ tree = None
 node = None
 findCheck = False
 
+
 State = type("State",(object,),{})
 
 class Initial(State):
@@ -113,21 +114,19 @@ map = {
       }
 #list of possible states of machine
 states = {
-          'DEFAULT'   : False,
-          'DC'        : False,
-          'SR'        : False,
-          'PS'        : False,
-          'VU'        : False,
-          'MS'        : False,
-          'PF'        : False,
-          'OP'        : False,
-          'FP1'       : False,
-          'FP2'       : False,
-          'FP3'       : False,
-          'FP4'       : False,
-          'SD1andSD2' : False,
-          'SD1andSD3' : False,
-          'SD2andSD3' : False
+          'NoCurrentFromDCCurrentSource'   : False,
+          'PressureSwitchFailInClosedPos'        : False,
+          'VictingUnitFailsToRaiseSignal'        : False,
+          'FusePlug1DoesNotRespond'        : False,
+          'FusePlug2DoesNotRespond'        : False,
+          'FusePlug3DoesNotRespond'        : False,
+          'FusePlug4DoesNotRespond'        : False,
+          'SmokeDetector1and2DoesntRespond'        : False,
+          'SmokeDetector1and3DoesntRespond'       : False,
+          'SmokeDetector2and3DoesntRespond'       : False,
+          'ManualSwitchFallsToOpen'       : False,
+          'PressureSwitchFalls'       : False,
+          'OperatorFailsToTakeAction' : False
          }
 #current state of state-machine
 currentState = FSMStates[0]
@@ -157,15 +156,11 @@ def findInFaultTree(currentNode):
              findCheck = True
              currentState = FSMStates[2]
              currentSignal = signalsFSM[-3]
-             #print(currentNode[i].tag)
-             #FSM()   
-             return True 
+             print(currentNode[i].tag)
+             switchState(currentNode[i].tag)
          elif(len(currentNode[i]) == 0 and currentNode[i].text == treeFaultSignals[currentNode[i].tag]):
              currentState = FSMStates[0]
              currentSignal = signalsFSM[-1]
-             print(currentNode[i].tag)
-             return False
-             #FSM()
          elif(len(currentNode[i]) > 1):
              if findCheck == False:
                  time.sleep(2)
@@ -174,7 +169,6 @@ def findInFaultTree(currentNode):
             
 def switchState(state):
     exitFromLastState()
-    print('***SYSTEM SET', state, 'STATE***\n')
     states[state] = True
                         
 def exitFromLastState():
@@ -186,39 +180,24 @@ def exitFromLastState():
     
 #main function
 def main(argv = sys.argv):
-     #global tree
-     #global node
-     #global findCheck
+     global tree
+     global node
+     global findCheck
      try:
         tree = ET.parse('faultTree.xml')
      except IOError as e:
         print ('\nERROR - cant find file: %s\n') % e 
-     node = tree.getroot()
-     while True:
-          print('Do you want start the system(y/n):\n')
-          a = input()
-          if a == 'y' or a =='Y':
-              findCheck = False
-              #print('***ALL IS FINE, SYSTEM WORK IN DEFAULT = ',states['DEFAULT'],' STATE***\n')
-              time.sleep(5)
-              #numberOfCase = randint(0,13)
-              #print('***SOME KIND OF TROUBLE***', map[numberOfCase])
-
-              findInFaultTree(node[0])
-          else:
-              sys.exit()          
+     node = tree.getroot()     
 
 
 if __name__ == "__main__":
-   global tree
-   global node
-   global findCheck
-   try:
-      tree = ET.parse('faultTree.xml')
-   except IOError as e:
-      print ('\nERROR - cant find file: %s\n') % e 
-   node = tree.getroot()
+   f = open('fsmConfig.txt','r')
+   for idx,line in enumerate(f):
+        treeFaultSignals[map[idx]] = line[3:5]
+   sorted(treeFaultSignals)
    
+   main()
+   findInFaultTree(node[0])
    state = Char()
    state.FSM.states["Initial"] = Initial()
    state.FSM.states["Emergency"] = Emergency()
@@ -226,22 +205,19 @@ if __name__ == "__main__":
    state.FSM.transitions["toEmergency"] = Transition("Emergency")
    state.FSM.setState("Initial")
 
-   for i in range(20):
-       
-       
+   for i in states.keys():
+       #print(states.values())
        startTime = clock()
        timeInterval = 1
        while(startTime + timeInterval > clock()):
            pass
-       if(findInFaultTree(node[0]) == True):
+       #if(randint(0,2)):
+       if(states[i]):
            state.FSM.transition("toEmergency")
            state.Initial = False
-       elif(findInFaultTree(node[0]) == False):
+       else:
            state.FSM.transition("toInitial")
            state.Initial = True
-   state.FSM.Execute()
-   #f = open('fsmConfig.txt','r')
-   #for idx,line in enumerate(f):
-        #treeFaultSignals[map[idx]] = line[3:5]
-   #sorted(treeFaultSignals)
+       state.FSM.Execute()
+  
    #main()
