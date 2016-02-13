@@ -142,7 +142,6 @@ def FSM():
     global currentState 
     global currentSignal
     newState = FSMTable[(currentState,currentSignal)]
-    #print(currentState, currentSignal, newState)
     currentState = newState;
     print(currentState)
 
@@ -174,9 +173,7 @@ def switchState(state):
 def exitFromLastState():
     for state in states.keys():
         if states[state] == True:
-            states[state] = False
-        else:
-            print(state, states[state])                    
+            states[state] = False                  
     
 #main function
 def main(argv = sys.argv):
@@ -206,12 +203,10 @@ if __name__ == "__main__":
    state.FSM.setState("Initial")
 
    for i in states.keys():
-       #print(states.values())
        startTime = clock()
        timeInterval = 1
        while(startTime + timeInterval > clock()):
            pass
-       #if(randint(0,2)):
        if(states[i]):
            state.FSM.transition("toEmergency")
            state.Initial = False
@@ -220,4 +215,3 @@ if __name__ == "__main__":
            state.Initial = True
        state.FSM.Execute()
   
-   #main()
