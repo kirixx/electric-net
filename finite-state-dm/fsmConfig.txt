@@ -1,15 +1,14 @@
-initial
-0 :10
-1 :11
-2 :20
-3 :51
-4 :31
-5 :32
-6 :33
-7 :34
-8 :41
-9 :42
-10:43
-11:61
-12:62
-13:63
+0 :10 Default:NoCurrentFromDCCurrentSource    :10
+1 :11 Default:StartRelayFailInOpenPosition    :11
+2 :20 Default:PressureSwitchFailInClosedPos   :20
+3 :51 Default:VictingUnitFailsToRaiseSignal   :51
+4 :31 Default:FusePlug1DoesNotRespond         :31
+5 :32 Default:FusePlug2DoesNotRespond         :32
+6 :33 Default:FusePlug3DoesNotRespond         :33
+7 :34 Default:FusePlug4DoesNotRespond         :34
+8 :41 Default:SmokeDetector1and2DoesntRespond :41
+9 :42 Default:SmokeDetector1and3DoesntRespond :42
+10:45 Default:SmokeDetector2and3DoesntRespond :43
+11:61 Default:ManualSwitchFallsToOpen         :61
+12:62 Default:PressureSwitchFalls             :62
+13:63 Default:OperatorFailsToTakeAction       :63

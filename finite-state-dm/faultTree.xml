@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FaultTree>
 	<NoSignalFromTheStartRelay>
-		<NoCurrentFromDCCurrentSource stateId = "DC"/>10</NoCurrentFromDCCurrentSource>
+		<NoCurrentFromDCCurrentSource stateId = "DC">10</NoCurrentFromDCCurrentSource>
 		<NoSignalFromDetectionSystem>
 			<NoSignalFromHeatDetectionSys>
 					<PressureSwitchFailInClosedPos stateId = "PS">20</PressureSwitchFailInClosedPos>
@@ -22,7 +22,7 @@
 			</NoSignalFromSmokeDetectionSys>
 			<NoSignalFromManualActSys>
 				<ManualSwitchFallsToOpen stateId = "MS">61</ManualSwitchFallsToOpen>
-				<PressureSwitchFalls stateId = "PS"/>62</PressureSwitchFalls>
+				<PressureSwitchFalls stateId = "PS">62</PressureSwitchFalls>
 				<OperatorFailsToTakeAction stateId = "OP">63</OperatorFailsToTakeAction>
 			</NoSignalFromManualActSys>
 		</NoSignalFromDetectionSystem>
