@@ -17,10 +17,12 @@ State = type("State",(object,),{})
 class Initial(State):
     def Execute(self):
         print('Initial')
+        time.sleep(1)
 
 class Emergency(State):
     def Execute(self):
         print('Emergency')
+        time.sleep(10)
 
 class Transition(object):
     def  __init__(self,toState):
@@ -56,45 +58,22 @@ class Char(object):
         self.Initial = True
 
 
-
-signalsFSM = {
-            -3: 'emergency',
-            -2: 'off',
-            -1: 'initial'
-             }
- 
 treeFaultSignals ={
-            'NoCurrentFromDCCurrentSource' : 0,
-            'StartRelayFailInOpenPosition' : 0,
-            'PressureSwitchFailInClosedPos' : 0,
-            'VictingUnitFailsToRaiseSignal' : 0,
-            'FusePlug1DoesNotRespond' : 0,
-            'FusePlug2DoesNotRespond' : 0,
-            'FusePlug3DoesNotRespond' : 0,
-            'FusePlug4DoesNotRespond' : 0,
+            'NoCurrentFromDCCurrentSource'    : 0,
+            'StartRelayFailInOpenPosition'    : 0,
+            'PressureSwitchFailInClosedPos'   : 0,
+            'VictingUnitFailsToRaiseSignal'   : 0,
+            'FusePlug1DoesNotRespond'         : 0,
+            'FusePlug2DoesNotRespond'         : 0,
+            'FusePlug3DoesNotRespond'         : 0,
+            'FusePlug4DoesNotRespond'         : 0,
             'SmokeDetector1and2DoesntRespond' : 0,
             'SmokeDetector1and3DoesntRespond' : 0,
-            'SmokeDetector2and3DoesntRespond': 0,
-            'ManualSwitchFallsToOpen': 0,
-            'PressureSwitchFalls': 0,
-            'OperatorFailsToTakeAction': 0
+            'SmokeDetector2and3DoesntRespond' : 0,
+            'ManualSwitchFallsToOpen'         : 0,
+            'PressureSwitchFalls'             : 0,
+            'OperatorFailsToTakeAction'       : 0
     }
-FSMStates =['initial','off','emergency']
-FSMTable = {
-            #initial
-            (FSMStates[0],signalsFSM[-3]) : FSMStates[2], #emergency
-            (FSMStates[0],signalsFSM[-2]) : FSMStates[1], #off
-            (FSMStates[0],signalsFSM[-1]) : FSMStates[0], #initial
-            #off
-            (FSMStates[1],signalsFSM[-3]) : FSMStates[2], #emergency
-            (FSMStates[1],signalsFSM[-2]) : FSMStates[1], #off
-            (FSMStates[1],signalsFSM[-1]) : FSMStates[0], #initial
-            #emergency
-            (FSMStates[2],signalsFSM[-3]) : FSMStates[2], #emergency
-            (FSMStates[2],signalsFSM[-2]) : FSMStates[1], #off
-            (FSMStates[2],signalsFSM[-1]) : FSMStates[0]  #initial
-           }
-
 #setting modulation cases
 map = {
             0  : 'NoCurrentFromDCCurrentSource',                      
@@ -115,22 +94,20 @@ map = {
 #list of possible states of machine
 states = {
           'NoCurrentFromDCCurrentSource'   : False,
-          'PressureSwitchFailInClosedPos'        : False,
-          'VictingUnitFailsToRaiseSignal'        : False,
+          'PressureSwitchFailInClosedPos'  : False,
+          'VictingUnitFailsToRaiseSignal'  : False,
           'FusePlug1DoesNotRespond'        : False,
           'FusePlug2DoesNotRespond'        : False,
           'FusePlug3DoesNotRespond'        : False,
           'FusePlug4DoesNotRespond'        : False,
-          'SmokeDetector1and2DoesntRespond'        : False,
-          'SmokeDetector1and3DoesntRespond'       : False,
-          'SmokeDetector2and3DoesntRespond'       : False,
-          'ManualSwitchFallsToOpen'       : False,
-          'PressureSwitchFalls'       : False,
-          'OperatorFailsToTakeAction' : False
+          'SmokeDetector1and2DoesntRespond': False,
+          'SmokeDetector1and3DoesntRespond': False,
+          'SmokeDetector2and3DoesntRespond': False,
+          'ManualSwitchFallsToOpen'        : False,
+          'PressureSwitchFalls'            : False,
+          'OperatorFailsToTakeAction'      : False
          }
-#current state of state-machine
-currentState = FSMStates[0]
-currentSignal = signalsFSM[-1]
+
 def getSignal():
     f = open('fsmConfig.txt')
     global currentSignal
@@ -152,19 +129,15 @@ def findInFaultTree(currentNode):
     global currentSignal
     for i in range(len(currentNode)):
          if(len(currentNode[i]) == 0 and currentNode[i].text != treeFaultSignals[currentNode[i].tag]):
-             findCheck = True
-             currentState = FSMStates[2]
-             currentSignal = signalsFSM[-3]
-             print(currentNode[i].tag)
-             switchState(currentNode[i].tag)
+             print('\nEmergncy', currentNode[i].tag, 'default signal',currentNode[i].text,'mutable signal',treeFaultSignals[currentNode[i].tag],'\n')
+             states[currentNode[i].tag] = True
          elif(len(currentNode[i]) == 0 and currentNode[i].text == treeFaultSignals[currentNode[i].tag]):
-             currentState = FSMStates[0]
-             currentSignal = signalsFSM[-1]
+             print(currentNode[i].tag, 'default signal',currentNode[i].text,'mutable signal',treeFaultSignals[currentNode[i].tag])
+             time.sleep(1)
          elif(len(currentNode[i]) > 1):
-             if findCheck == False:
-                 time.sleep(2)
-                 print(currentNode[i])
-                 findInFaultTree(currentNode[i])
+             time.sleep(1)
+             print(currentNode[i])
+             findInFaultTree(currentNode[i])
             
 def switchState(state):
     exitFromLastState()
@@ -185,14 +158,12 @@ def main(argv = sys.argv):
      except IOError as e:
         print ('\nERROR - cant find file: %s\n') % e 
      node = tree.getroot()     
-
+     f = open('fsmConfig.txt','r')
+     for idx,line in enumerate(f):
+        treeFaultSignals[map[idx]] = line[3:5]
+     sorted(treeFaultSignals)
 
 if __name__ == "__main__":
-   f = open('fsmConfig.txt','r')
-   for idx,line in enumerate(f):
-        treeFaultSignals[map[idx]] = line[3:5]
-   sorted(treeFaultSignals)
-   
    main()
    findInFaultTree(node[0])
    state = Char()
@@ -202,16 +173,15 @@ if __name__ == "__main__":
    state.FSM.transitions["toEmergency"] = Transition("Emergency")
    state.FSM.setState("Initial")
 
-   for i in states.keys():
-       startTime = clock()
-       timeInterval = 1
-       while(startTime + timeInterval > clock()):
-           pass
-       if(states[i]):
+   for i in states.keys():      
+       if(states[i]): 
+           states[i] = False
            state.FSM.transition("toEmergency")
-           state.Initial = False
+           state.Initial = False      
        else:
            state.FSM.transition("toInitial")
            state.Initial = True
+       print(i)
        state.FSM.Execute()
+       print('\n')
   
